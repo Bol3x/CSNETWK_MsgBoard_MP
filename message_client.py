@@ -21,8 +21,8 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 try:
     #register the user
     print("Registering as " + username)
-    msg_send = json.dumps(msg_register).encode('utf-8')
-    sock.sendto(msg_send, (server_addr, server_port))
+    send_msg = json.dumps(msg_register).encode('utf-8')
+    sock.sendto(send_msg, (server_addr, server_port))
 
     recv, address = sock.recvfrom(1024)
     #convert the received string into a json dict
