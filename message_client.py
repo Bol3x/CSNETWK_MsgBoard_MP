@@ -41,9 +41,14 @@ print("Registration successful")
 
 #TODO how the fuck do we exit this
 while True:
-    msg_message = input("Enter message to send: ")
-    sock.sendto(json.dumps(msg_send), (server_addr, server_port))
+    msg_message = input("Enter message to send (type q to quit): ")
 
+    #quit
+    if msg_message = "q":
+        break
+
+    #send message
+    sock.sendto(json.dumps(msg_send), (server_addr, server_port))
     recv, address = sock.recvfrom(1024)
     #convert the received string into a json dict
     recv_json = json.loads(recv)
