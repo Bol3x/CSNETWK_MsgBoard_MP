@@ -7,7 +7,6 @@ msg_message = "This is my message."
 
 msg_register = {"command":"register","username":username}
 msg_deregister = {"command":"deregister","username":username}
-msg_send = {"command":"msg","username":username,"message":msg_message} #might move this
 
 server_addr = input("Enter server address: ")
 server_port = input("Port:")
@@ -49,6 +48,8 @@ while True:
     #quit
     if msg_message == "q":
         break
+
+    msg_send = {"command":"msg","username":username,"message":msg_message}
 
     #send message
     send_msg = json.dumps(msg_send).encode('utf-8')
