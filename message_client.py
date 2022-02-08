@@ -39,7 +39,6 @@ if recv_code != 401:
 
 print("Registration successful")
 
-#TODO how the fuck do we exit this
 while True:
     msg_message = input("Enter message to send (type q to quit): ")
 
