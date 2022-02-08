@@ -49,7 +49,7 @@ while True:
             server_msg = success_command_msg
             
             #display list of users registered to server
-            print("New user added: {user}".format(json_msg.get('username')))
+            print("New user added: {user}".format(user=json_msg.get('username')))
             print("Current users in message board: ", clients)
             
         
@@ -88,5 +88,5 @@ while True:
     else:
         server_msg = unknown_command_msg
     
-    ret_msg = json.dumps(server_msg)
+    ret_msg = json.dumps(server_msg).encode('utf-8')
     server_socket.sendto(ret_msg, address)

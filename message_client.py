@@ -21,38 +21,43 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 try:
     #register the user
     print("Registering as " + username)
-    sock.sendto(json.dumps(msg_register), (server_addr, server_port))
+    msg_send = json.dumps(msg_register).encode('utf-8')
+    sock.sendto(msg_send, (server_addr, server_port))
 
     recv, address = sock.recvfrom(1024)
     #convert the received string into a json dict
     recv_json = json.loads(recv)
-    recv_code = int(recv_json["ret_code"])
+    recv_code = int(recv_json.get('code_no'))
+    
+    if recv_code != 401:
+        print("Server returned error code " + recv_code)
+        print("Closing socket")
+        sock.close()
 
-except:
-    print("Error received, closing connection")
+    print("Registration successful")
+
+except Exception as e:
+    print("Error received: ")
+    print(e)
+    print("closing connection")
     sock.close()
 
-if recv_code != 401:
-    print("Server returned error code " + recv_code)
-    print("Closing socket")
-    sock.close()
-
-print("Registration successful")
 
 #TODO how the fuck do we exit this
 while True:
     msg_message = input("Enter message to send (type q to quit): ")
 
     #quit
-    if msg_message = "q":
+    if msg_message == "q":
         break
 
     #send message
-    sock.sendto(json.dumps(msg_send), (server_addr, server_port))
+    send_msg = json.dumps(msg_message).encode('utf-8')
+    sock.sendto(send_msg, (server_addr, server_port))
     recv, address = sock.recvfrom(1024)
     #convert the received string into a json dict
     recv_json = json.loads(recv)
-    recv_code = int(recv_json["ret_code"])
+    recv_code = int(recv_json.get('code_no'))
 
     if recv_code != 401:
         print("Server returned error code "  + recv_code)
@@ -60,5 +65,6 @@ while True:
 
 
 #send a dereg message and then close socket
-sock.sendto(json.dumps(msg_deregister), (server_addr, server_port))
+send_msg = json.dumps(msg_deregister).encode('utf-8')
+sock.sendto(send_msg, (server_addr, server_port))
 sock.close()
