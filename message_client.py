@@ -32,6 +32,7 @@ try:
         print("Username is already taken.")
         print("Closing socket...")
         sock.close()
+        
     else:
         print("Registration successful")
     
@@ -40,29 +41,40 @@ try:
 
             #quit
             if msg_message == "q":
-                break
+                #send a dereg message and then close socket
+                print("Leaving server...")
+                dereg_msg = json.dumps(msg_deregister).encode('utf-8')
+                sock.sendto(dereg_msg, (server_addr, server_port))
+                
+                recv, addr = sock.recvfrom(1024)
+                recv_json = json.loads(recv)
+                recv_code = int(recv_json.get('code_no'))
+                if recv_code == 401:
+                    print("Left the server.")
+                    print("Closing socket.")
+                    sock.close()
+                    break
+                else:
+                    print("Server returned error code ", recv_code)
 
-            msg_send = {"command":"msg","username":username,"message":msg_message}
+            else:
+                msg_send = {"command":"msg","username":username,"message":msg_message}
 
-            #send message
-            send_msg = json.dumps(msg_send).encode('utf-8')
-            sock.sendto(send_msg, (server_addr, server_port))
-            recv, address = sock.recvfrom(1024)
-            #convert the received string into a json dict
-            recv_json = json.loads(recv)
-            recv_code = int(recv_json.get('code_no'))
+                #send message
+                send_msg = json.dumps(msg_send).encode('utf-8')
+                sock.sendto(send_msg, (server_addr, server_port))
+                recv, address = sock.recvfrom(1024)
+                #convert the received string into a json dict
+                recv_json = json.loads(recv)
+                recv_code = int(recv_json.get('code_no'))
 
-            if recv_code != 401:
-                print("Server returned error code ", recv_code)
-                break 
-
-        #send a dereg message and then close socket
-        print("Closing connection")
-        send_msg = json.dumps(msg_deregister).encode('utf-8')
-        sock.sendto(send_msg, (server_addr, server_port))
+                if recv_code != 401:
+                    print("Server returned error code ", recv_code)
+                    break 
 
 except Exception as e:
     print("Error received: ")
     print(e)
+    print(e.__traceback__)
     print("closing socket.")
     sock.close()

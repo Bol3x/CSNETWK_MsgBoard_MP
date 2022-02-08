@@ -29,7 +29,7 @@ print("Server is now waiting for requests.")
 while True:
     #listen for data from clients
     data, address = server_socket.recvfrom(buffer_size)
-
+        
     json_msg = json.loads(data)                 #convert json data into dictionary type
     command = str(json_msg.get('command'))      #obtain command type of message
         
