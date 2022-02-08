@@ -51,7 +51,7 @@ while True:
         break
 
     #send message
-    send_msg = json.dumps(msg_message).encode('utf-8')
+    send_msg = json.dumps(msg_send).encode('utf-8')
     sock.sendto(send_msg, (server_addr, server_port))
     recv, address = sock.recvfrom(1024)
     #convert the received string into a json dict
@@ -64,6 +64,7 @@ while True:
 
 
 #send a dereg message and then close socket
+print("Closing connection")
 send_msg = json.dumps(msg_deregister).encode('utf-8')
 sock.sendto(send_msg, (server_addr, server_port))
 sock.close()
