@@ -70,7 +70,9 @@ try:
 
                 if recv_code != 401:
                     print("Server returned error code ", recv_code)
-                    break 
+                
+                else:
+                    print("Message sent.")
 
 except Exception as e:
     print("Error received: ")
